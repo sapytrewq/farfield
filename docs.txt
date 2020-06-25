@@ -1,0 +1,2 @@
+Arm servo: (0,0,180) for 0 deg, (0,230,180) for 180 deg
+Base servo: (1,-5,180) for 0 deg, (1,230,180) for 180 deg
