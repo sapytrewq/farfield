@@ -1,7 +1,7 @@
 import pi_servo_hat
 import time
 
-arm_range = [0, 232] # min, max
+arm_range = [0, 230] # min, max
 base_range = [-5, 230] # min, max
 
 arm_channel = 0
