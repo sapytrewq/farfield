@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 import time
 import scan
 import choosenumber
+import csvinterface
+import twographs_tabs
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
