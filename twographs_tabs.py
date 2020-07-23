@@ -4,34 +4,60 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import csvinterface
+import math
+
+
+def to_rad(val):
+        return val * math.pi / 180
+
+def transform_val(phi, theta, intensity):
+        ''' returns x,y,z position of the emission vector
+            phi - position of arm
+            theta - position of base '''
+
+        xpos = intensity * math.cos(to_rad(phi)) * math.sin(to_rad(theta))
+        ypos = intensity * math.cos(to_rad(phi)) * math.cos(to_rad(theta))
+        zpos = intensity * math.sin(to_rad(phi))
+
+        return xpos, ypos, zpos
+
+
+def plot_surface_file(ax, filename):
+        xData, yData, zData = csvinterface.read_csv(means_filename)
+
+            corrected_x_data = []
+            corrected_y_data = []
+            corrected_z_data = []
+
+            for phiindex in range(len(zdata)):
+                    phirow = zdata[thetaindex]
+                    for thetaindex in range(len(phirow)):
+                            intensity = thetarow[thetaindex]
+                            phi = xData[phiindex]
+                            theta = yData[thetaindex]
+
+                            x, y, z = transform_val(phi, theta, intensity)
+
+                            corrected_x_data.append(x)
+                            corrected_y_data.append(y)
+                            corrected_z_data.append(z)
+
+
+            # Plot the surface.
+            ax1 = fig.gca(projection='3d')
+            surf = ax1.plot_trisurf(xData, yData, zData, cmap=cm.viridis,
+                                   linewidth=0, antialiased=False)
+
 
 
 def plot_everything(means_filename, stdev_filename):
 
         #set up a figure
         fig = plt.figure(figsize=plt.figaspect(0.3))
-        #
 
         ax1 = fig.add_subplot(1, 2, 1, projection='3d')
 
-        xData, yData, zData = csvinterface.read_csv(means_filename)
-
-        #print("returned data")
-        #for el in zData: print(el)
-        #print("end returned data")
-
-        #print("zdata shape",zData.shape)
-        #print("x,y len",len(xData), len(yData))
-        #print(xData)
-        #print(yData)
-
-        xData, yData = np.meshgrid(yData, xData)
-
-
-        # Plot the surface.
-        ax1 = fig.gca(projection='3d')
-        surf = ax1.plot_surface(xData, yData, zData, cmap=cm.viridis,
-                               linewidth=0, antialiased=False)
+        plot_surface_file(ax1, means_filename)
 
         # Title
         # Placement 0, 0 would be the bottom left, 1, 1 would be the top right.
@@ -40,10 +66,9 @@ def plot_everything(means_filename, stdev_filename):
         # Tweaking display region and labels
         ax1.set_xlim(0, 180)
         ax1.set_ylim(0, 180)
-        ax1.set_xlabel('θ (base, degrees)', color='crimson')
-        ax1.set_ylabel('ɸ (arm, degrees)', color='crimson')
+        #ax1.set_xlabel('θ (base, degrees)', color='crimson')
+        #ax1.set_ylabel('ɸ (arm, degrees)', color='crimson')
         ax1.set_zlabel('⚡ (Volts)', color='crimson')
-
 
         # Customize the z axis.
         ax1.set_zlim(0, 5)
@@ -54,17 +79,11 @@ def plot_everything(means_filename, stdev_filename):
         fig.colorbar(surf, shrink=0.5, aspect=5, ax=ax1)
 
 
-        #Second graph 
+        #Second graph
 
         ax2 = fig.add_subplot(1, 2, 2, projection='3d')
 
-        xData2, yData2, zData2 = csvinterface.read_csv(stdev_filename)
-        xData2, yData2 = np.meshgrid(yData2, xData2)
-
-        # Plot the surface.
-        ax2 = fig.gca(projection='3d')
-        surf = ax2.plot_surface(xData2, yData2, zData2, cmap=cm.viridis,
-                               linewidth=0, antialiased=False)
+        plot_surface_file(ax2, stdev_filename)
 
         # Title
         # Placement 0, 0 would be the bottom left, 1, 1 would be the top right.
@@ -73,8 +92,8 @@ def plot_everything(means_filename, stdev_filename):
         # Tweaking display region and labels
         ax2.set_xlim(0, 180)
         ax2.set_ylim(0, 180)
-        ax2.set_xlabel('θ (base, degrees)', color='crimson')
-        ax2.set_ylabel('ɸ (arm, degrees)', color='crimson')
+        #ax2.set_xlabel('θ (base, degrees)', color='crimson')
+        #ax2.set_ylabel('ɸ (arm, degrees)', color='crimson')
         ax2.set_zlabel('⚡ (Volts)', color='crimson')
 
 
@@ -88,6 +107,6 @@ def plot_everything(means_filename, stdev_filename):
 
         plt.show()
 
-#plot_everything("farfield_1_means.csv", "farfield_1_stdevs.csv")
+plot_everything("farfield_12_means.csv", "farfield_12_stdevs.csv")
 
 
