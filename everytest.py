@@ -3,7 +3,7 @@ import time
 import scan
 import choosenumber
 import csvinterface
-import twographs_tabs
+import twographs
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)

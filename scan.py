@@ -2,7 +2,7 @@ import servocontrol
 import detector
 import time
 import csvinterface
-import twographs_tabs
+import twographs
 import simpleplot
 
 servocontrol.move_arm(0)
@@ -42,7 +42,7 @@ def full_scan(num_scans):
 	servocontrol.move_arm(0)
 	servocontrol.move_base(0)
 	means_filename, stdev_filename = writer.save_csv()
-	twographs_tabs.plot_everything(means_filename, stdev_filename)
+	twographs.plot_everything(means_filename, stdev_filename)
 
 def two_axis_scan(num_scans):
 	'''scans over x and y'''

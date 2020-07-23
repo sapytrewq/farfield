@@ -4,7 +4,7 @@ import time
 import adafruit_ads1x15.ads1015 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
-detector_pin = ADS.P3
+detector_pin = ADS.P1
 
 i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1015(i2c)

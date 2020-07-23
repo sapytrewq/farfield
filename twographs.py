@@ -125,6 +125,6 @@ def plot_everything(means_filename, stdev_filename):
 
         plt.show()
 
-plot_everything("farfield_12_means.csv", "farfield_12_stdevs.csv")
+#plot_everything("farfield_12_means.csv", "farfield_12_stdevs.csv")
 
 
