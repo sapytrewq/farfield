@@ -85,8 +85,9 @@ def plot_mayavi(filename):
                 triangles.append([fourth_point_index, second_point_index, third_point_index])
         
         #mlab.options.backend = 'envisage'
-        mlab.figure("Mean Directivity")
-        mlab.triangular_mesh(corrected_x_data, corrected_y_data, corrected_z_data, triangles)   
+        mlab.figure("Mean Directivity", size = (800, 480))
+        mlabmesh = mlab.triangular_mesh(corrected_x_data, corrected_y_data, corrected_z_data, triangles, representation='wireframe')
+        mlabmesh.actor.property.lighting = True
         mlab.axes()
         mlab.show()
 
