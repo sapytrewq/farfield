@@ -1,8 +1,7 @@
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import matplotlib.tri as mtri
 from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import csvinterface
 import math
 
@@ -10,49 +9,76 @@ import math
 def to_rad(val):
         return val * math.pi / 180
 
-def transform_val(phi, theta, intensity):
+def transform_val(theta, phi, intensity): # theta phi swapped
         ''' returns x,y,z position of the emission vector
             phi - position of arm
             theta - position of base '''
 
-        xpos = intensity * math.cos(to_rad(phi)) * math.sin(to_rad(theta))
-        ypos = intensity * math.cos(to_rad(phi)) * math.cos(to_rad(theta))
+        xpos = intensity * math.cos(to_rad(phi)) * math.cos(to_rad(theta))
+        ypos = intensity * math.cos(to_rad(phi)) * math.sin(to_rad(theta))
         zpos = intensity * math.sin(to_rad(phi))
+            
+        
+        #xpos = math.cos(to_rad(phi)) * math.sin(to_rad(theta))
+        #ypos = math.cos(to_rad(phi)) * math.cos(to_rad(theta))
+        #zpos = intensity
 
         return xpos, ypos, zpos
 
 
-def plot_surface_file(ax, filename, scatter = False):
+def plot_surface_file(ax, filename, scatter = True):
         xData, yData, zData = csvinterface.read_csv(filename)
+        
+        # assume constant baseline and linear scaling - subtract off mininum value
+        
+        minval = 10 # max of 5v on ADC, so this is absurdly high
+        
+        for row in zData:
+            for el in row:
+                if el < minval: minval = el
+        
+        print("minval", minval)
 
         corrected_x_data = []
         corrected_y_data = []
         corrected_z_data = []
+        
 
         for phiindex in range(len(zData)):
                 phirow = zData[phiindex]
                 for thetaindex in range(len(phirow)):
+
                         intensity = phirow[thetaindex]
                         phi = xData[phiindex]
                         theta = yData[thetaindex]
 
-                        x, y, z = transform_val(phi, theta, intensity)
+                        x, y, z = transform_val(phi, theta, intensity-minval)
+                        
 
                         corrected_x_data.append(x)
                         corrected_y_data.append(y)
                         corrected_z_data.append(z)
+                    
 
 
         # Plot the surface.
 
-        if scatter: surf = ax.scatter(corrected_x_data, corrected_y_data, corrected_z_data, marker = 'o', c=corrected_z_data)
-        else: surf = ax.plot_trisurf(np.array(corrected_x_data), np.array(corrected_y_data), np.array(corrected_z_data), cmap=cm.viridis, linewidth=0, antialiased=False)
+        if scatter:
+            surf = ax.scatter(corrected_x_data, corrected_y_data, corrected_z_data, marker = '.', c=corrected_z_data, s=20, alpha=1)
+            #ax.contourf(corrected_x_data, corrected_y_data, corrected_z_data)
+        else: 
+            triang = mtri.Triangulation(corrected_x_data, corrected_y_data)
 
-        # Formatting
-        #ax.grid(True)
-        #ax.set_xticks([])
-        #ax.set_yticks([])
-        #ax.set_zticks([])
+            # Mask off unwanted triangles.
+            xmid = np.array(corrected_x_data)[triang.triangles].mean(axis=1)
+            ymid = np.array(corrected_y_data)[triang.triangles].mean(axis=1)
+            mask = xmid**2 + ymid**2 < 0.1**2
+            triang.set_mask(mask)
+
+            #surf = ax.plot_trisurf(np.array(corrected_x_data), np.array(corrected_y_data), np.array(corrected_z_data), cmap=cm.viridis, linewidth=0, antialiased=False)
+            surf = ax.plot_trisurf(triang, np.array(corrected_z_data), cmap=cm.viridis, linewidth=0, antialiased=False)
+
+            
 
         return surf, zData
 
@@ -80,7 +106,7 @@ def plot_everything(means_filename, stdev_filename):
         ax1.set_zlabel('Z Magnitude', color='crimson')
 
         # Customize the z axis.
-        ax1.set_zlim(0, 5)
+        #ax1.set_zlim(0, 5)
 
         #Second graph
         ax2 = fig.add_subplot(1, 2, 2, projection='3d')
@@ -93,9 +119,11 @@ def plot_everything(means_filename, stdev_filename):
             for j in range(len(ilist)):
                 jval = ilist[j]
                 if jval == 0: zData2[i][j] == 0
+                elif zDataAbs[i][j] == 0: zData2[i][j] == 0
                 else: zData2[i][j] = 20*math.log10(zDataAbs[i][j]/jval)
 
         xData2, yData2 = np.meshgrid(yData2, xData2)
+
 
 
         # Plot the surface.
@@ -125,6 +153,6 @@ def plot_everything(means_filename, stdev_filename):
 
         plt.show()
 
-#plot_everything("farfield_12_means.csv", "farfield_12_stdevs.csv")
+#plot_everything("farfield_3_means.csv", "farfield_3_stdevs.csv")
 
 
