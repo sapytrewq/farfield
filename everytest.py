@@ -4,36 +4,11 @@ import scan
 import choosenumber
 import csvinterface
 import twographs
+import armpositioning 
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
-#Button = 8
-#LED = 7
-#GPIO.setup(Button,GPIO.IN,pull_up_down=GPIO.PUD_UP)
-#GPIO.setup(LED,GPIO.OUT)
-#
-#GPIO.output(LED,GPIO.LOW)  
-#
-#
-#Buttona = 19
-#LEDa = 26
-#GPIO.setup(Buttona,GPIO.IN,pull_up_down=GPIO.PUD_UP)
-#GPIO.setup(LEDa,GPIO.OUT)
-#
-#GPIO.output(LEDa,GPIO.LOW)
-#while True:
-#	if GPIO.input(Button):
-#		time.sleep(0.5)
-#		GPIO.output(LED,GPIO.HIGH)
-#		scan.full_scan(choosenumber.menu())
-#		GPIO.output(LED,GPIO.LOW)
-#	elif GPIO.input(Buttona):
-#		time.sleep(0.5)
-#		GPIO.output(LEDa,GPIO.HIGH)
-#		scan.one_axis_scan(choosenumber.menu())
-#		GPIO.output(LEDa,GPIO.LOW)  
-#
 
 modeButton1 = 8
 modeButton1_LED = 7
@@ -54,6 +29,7 @@ GPIO.setup(modeButton3_LED,GPIO.OUT)
 GPIO.output(modeButton3_LED,GPIO.LOW) 
 
 while True:
+	armpositioning.gainset()
 	if not GPIO.input(modeButton1):
 		time.sleep(0.5)
 		print("button 1 pressed: selected full scan")
