@@ -28,8 +28,11 @@ GPIO.setup(modeButton3,GPIO.IN,pull_up_down=GPIO.PUD_UP)
 GPIO.setup(modeButton3_LED,GPIO.OUT)
 GPIO.output(modeButton3_LED,GPIO.LOW) 
 
+print("Position arm and base to find max voltage and set gain accordingly")
+anglex = 0
+angley = 0
 while True:
-	armpositioning.gainset()
+	anglex, angley = armpositioning.gainset(anglex, angley)
 	if not GPIO.input(modeButton1):
 		time.sleep(0.5)
 		print("button 1 pressed: selected full scan")
@@ -50,6 +53,7 @@ while True:
 		GPIO.output(modeButton3_LED,GPIO.HIGH)
 		scan.two_axis_scan(choosenumber.menu())
 		GPIO.output(modeButton3_LED,GPIO.LOW)
+	time.sleep(0.02)
 
 
 	

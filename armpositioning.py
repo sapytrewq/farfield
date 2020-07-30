@@ -4,30 +4,28 @@ import time
 import detector 
 import servocontrol
 
-def gainset():
-
-	print("Position arm and base to find max voltage and set gain accordingly")
-
-	x,y,button = joystick.get_joystick()
+def gainset(anglex, angley):
 
 
-	if y > 700:
-		if angley < 180 angley += 1
-		servocontorl.move_base(angley)
-		print(detector.read_detector())
-	elif y < 200:
-		if angley > 0 angley -= 1
-		servocontorl.move_base(angley)
-		print(detector.read_detector())
-	if x > 700
-		if anglex < 180 anglex += 1
-		servocontorl.move_arm(anglex)
-		print(detector.read_detector())
-	elif x < 200 
-		if anglex > 0 anglex -= 1
-		servocontorl.move_arm(anglex)
-		print(detector.read_detector())
-	
+        x,y,button = joystick.get_joystick()
 
-	
-	#print("")
+        print("voltage:",detector.read_detector(),"V")
+
+        if y > 700:
+                if angley < 180: angley += 3
+                print("moving base to:",angley)
+                servocontrol.move_base(angley)
+        elif y < 200:
+                if angley > 0: angley -= 3
+                print("moving base to:",angley)
+                servocontrol.move_base(angley)
+        if x > 700:
+                if anglex < 180: anglex += 3
+                print("moving arm to:",anglex)
+                servocontrol.move_arm(anglex)
+        elif x < 200: 
+                if anglex > 0: anglex -= 3
+                print("moving arm to:",anglex)
+                servocontrol.move_arm(anglex)
+        return anglex, angley
+

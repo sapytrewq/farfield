@@ -5,7 +5,6 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 import csvinterface
 import math
-from mayavi import mlab
 #import numpy as np
 
 
@@ -27,70 +26,6 @@ def transform_val(theta, phi, intensity): # theta phi swapped
         #zpos = intensity
 
         return xpos, ypos, zpos
-
-def plot_mayavi(filename):
-    
-        xData, yData, zData = csvinterface.read_csv(filename)
-        
-        # assume constant baseline and linear scaling - subtract off mininum value
-        
-        minval = 10 # max of 5v on ADC, so this is absurdly high
-        
-        for row in zData:
-            for el in row:
-                if el < minval: minval = el
-
-        corrected_x_data = []
-        corrected_y_data = []
-        corrected_z_data = []
-        
-
-        for phiindex in range(len(zData)):
-                phirow = zData[phiindex]
-                for thetaindex in range(len(phirow)):
-
-                        intensity = phirow[thetaindex]
-                        phi = xData[phiindex]
-                        theta = yData[thetaindex]
-
-                        x, y, z = transform_val(phi, theta, intensity-minval)
-                        
-
-                        corrected_x_data.append(x)
-                        corrected_y_data.append(y)
-                        corrected_z_data.append(z)
-                         
-        # generating a triangular mesh
-            
-        num_phipoints = len(zData[0])
-        
-        # points are theta, phi 0-180
-        # first 91 points for theta = 0, next for theta = 1, etc
-        
-        # connect points in consecutive theta
-        
-        triangles = []
-        
-        # there will be as many triangles as there are points - 2
-        
-        for theta_index in range(len(zData)-1):
-            for phi_index in range(len(zData[0])-1):
-                # indices will be two consecutive points for theta = base, then one point for theta = base + 1
-                first_point_index  = theta_index*num_phipoints + phi_index
-                second_point_index = theta_index*num_phipoints + phi_index + 1
-                third_point_index  = (theta_index+1)*num_phipoints + phi_index
-                fourth_point_index = (theta_index+1)*num_phipoints + phi_index + 1
-                                
-                triangles.append([first_point_index, second_point_index, third_point_index])
-                triangles.append([fourth_point_index, second_point_index, third_point_index])
-        
-        #mlab.options.backend = 'envisage'
-        mlab.figure("Mean Directivity", size = (800, 480))
-        mlabmesh = mlab.triangular_mesh(corrected_x_data, corrected_y_data, corrected_z_data, triangles, representation='wireframe')
-        mlabmesh.actor.property.lighting = True
-        mlab.axes()
-        mlab.show()
-
 
 
 def plot_surface_file(ax, filename, scatter = False):
@@ -164,9 +99,6 @@ def plot_surface_file(ax, filename, scatter = False):
 
 
 def plot_everything(means_filename, stdev_filename):
-    
-        print("Plotting in Mayavi")
-        plot_mayavi("farfield_3_means.csv")
 
         print("Plotting in Matplotlib")
         #set up a figure
@@ -236,6 +168,6 @@ def plot_everything(means_filename, stdev_filename):
 
         plt.show()
 
-plot_everything("farfield_3_means.csv", "farfield_3_stdevs.csv")
+#plot_everything("farfield_3_means.csv", "farfield_3_stdevs.csv")
 
 

@@ -81,7 +81,9 @@ def one_axis_plot(means_filename, stdev_filename):
         snr = []
 
         for val, err in zip(intensityMean, intensityStdev):
-            snr.append(20*math.log10(val/err))
+            if val == 0 or err == 0:
+                snr.append(0)
+            else: snr.append(20*math.log10(val/err))
 
         plt.subplot(1, 2, 1)
         plt.plot(directivity_mean_x, directivity_mean_y, '.-')
