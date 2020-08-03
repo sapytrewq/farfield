@@ -15,7 +15,7 @@ def simple_plot(means_filename, stdev_filename):
         #graph 1
 
         baseAngle, armAngle, intensitiesMean = csvinterface.read_csv(means_filename)
-        baseAngle, armAngle, intensitiesStdev = csvinterface.read_csv(means_filename)
+        baseAngle, armAngle, intensitiesStdev = csvinterface.read_csv(stdev_filename)
 
         intensityMean0 = intensitiesMean[0]
         intensityMean90 = intensitiesMean[1]
@@ -28,12 +28,12 @@ def simple_plot(means_filename, stdev_filename):
         directivity_mean_90_y = []
 
         for angle, intensity in zip(armAngle, intensityMean0):
-            x,y = translatecoords(angle, intensity)
+            x, y = translatecoords(angle, intensity)
             directivity_mean_0_x.append(x)
             directivity_mean_0_y.append(y)
 
         for angle, intensity in zip(armAngle, intensityMean90):
-            x,y = translatecoords(angle, intensity)
+            x, y = translatecoords(angle, intensity)
             directivity_mean_90_x.append(x)
             directivity_mean_90_y.append(y)
 
@@ -41,10 +41,15 @@ def simple_plot(means_filename, stdev_filename):
         snr90 = []
 
         for val,err in zip(intensityMean0, intensityStdev0):
-            snr0.append(20*math.log10(val/err))
+            print(val,err)
+            if val == 0 or err == 0:
+                snr0.append(0)
+            else: snr0.append(20*math.log10(val/err))
 
         for val,err in zip(intensityMean90, intensityStdev90):
-            snr90.append(20*math.log10(val/err))
+            if val == 0 or err == 0:
+                snr90.append(0)
+            else: snr90.append(20*math.log10(val/err))
 
         plt.subplot(1, 2, 1)
         plt.plot(directivity_mean_0_x, directivity_mean_0_y, '.-')
@@ -63,11 +68,11 @@ def simple_plot(means_filename, stdev_filename):
 
 def one_axis_plot(means_filename, stdev_filename):
 
-        baseAngle, armAngle, intensityMean = csvinterface.read_csv(means_filename)
-        baseAngle, armAngle, intensityStdev = csvinterface.read_csv(stdev_filename)
+        baseAngle, armAngle, intensitiesMean = csvinterface.read_csv(means_filename)
+        baseAngle, armAngle, intensitiesStdev = csvinterface.read_csv(stdev_filename)
 
-        intensityMean = intensityMean[0]
-        intensityStdev = intensityStdev[0]
+        intensityMean = intensitiesMean[0]
+        intensityStdev = intensitiesStdev[0]
 
 
         directivity_mean_x = []
@@ -98,4 +103,4 @@ def one_axis_plot(means_filename, stdev_filename):
         plt.legend( [ 'Base: 0 Deg'] )
         plt.show()
 
-#one_axis_plot("farfield_14_means.csv", "farfield_14_stdevs.csv")
+simple_plot("farfield_2_means.csv", "farfield_2_stdevs.csv")

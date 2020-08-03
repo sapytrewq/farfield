@@ -1,4 +1,3 @@
-import choose_file
 import twographs
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
