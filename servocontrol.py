@@ -24,13 +24,14 @@ def linear_scale(rangelist, inputangle):
 def move_arm(angle):
 	global prev_arm_angle
 	servo_controller.move_servo_position(0, linear_scale(arm_range, angle), 180)
-	time.sleep(1.5/180*abs(angle-prev_arm_angle))
+	time.sleep(3/180*abs(angle-prev_arm_angle))
 	prev_arm_angle = angle
+        
 
 def move_base(angle):
 	global prev_base_angle
 	servo_controller.move_servo_position(1, linear_scale(base_range, angle), 180)
-	time.sleep(1.5/180*abs(angle-prev_base_angle))
+	time.sleep(3/180*abs(angle-prev_base_angle))
 	prev_base_angle = angle
 
 def sweep_servos():

@@ -41,7 +41,6 @@ def simple_plot(means_filename, stdev_filename):
         snr90 = []
 
         for val,err in zip(intensityMean0, intensityStdev0):
-            print(val,err)
             if val == 0 or err == 0:
                 snr0.append(0)
             else: snr0.append(20*math.log10(val/err))
@@ -52,6 +51,7 @@ def simple_plot(means_filename, stdev_filename):
             else: snr90.append(20*math.log10(val/err))
 
         plt.subplot(1, 2, 1)
+        plt.xlim([-2,2])
         plt.plot(directivity_mean_0_x, directivity_mean_0_y, '.-')
         plt.plot(directivity_mean_90_x, directivity_mean_90_y, '.-')
         plt.title('Mean Directivity')
@@ -92,6 +92,7 @@ def one_axis_plot(means_filename, stdev_filename):
 
         plt.subplot(1, 2, 1)
         plt.plot(directivity_mean_x, directivity_mean_y, '.-')
+        plt.xlim([-2,2])
         plt.title('Mean Directivity')
         plt.legend( [ 'Base: 0 Deg'] )
 
@@ -103,4 +104,4 @@ def one_axis_plot(means_filename, stdev_filename):
         plt.legend( [ 'Base: 0 Deg'] )
         plt.show()
 
-simple_plot("farfield_2_means.csv", "farfield_2_stdevs.csv")
+#simple_plot("farfield_2_means.csv", "farfield_2_stdevs.csv")
