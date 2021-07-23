@@ -68,8 +68,9 @@ def two_axis_scan(num_scans):
 
 def one_axis_scan(num_scans):
 	'''scans over x'''
-	detector.reset_fsr()
-	minimize_fsr()
+	#detector.reset_fsr()
+	#minimize_fsr()
+	detector.constant_gain()
 	servocontrol.move_arm(0)
 	servocontrol.move_base(0)
 	writer = csvinterface.CSVWriter(([0]), list(range(0,182,2)));	

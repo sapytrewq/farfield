@@ -13,6 +13,9 @@ chan = AnalogIn(ads, detector_pin)
 def reset_fsr():
 	ads.gain = 2/3
 
+def constant_gain():
+	ads.gain = 2
+	
 def set_fsr(max_voltage):
 	'''sets full scale range on adc'''
 	if max_voltage < 0.256: ads.gain = 16
