@@ -169,7 +169,7 @@ def plot_everything(means_filename, stdev_filename):
         plt.show()
 
 #plot_everything("farfield_3_means.csv", "farfield_3_stdevs.csv")
-plot_everything("a035/farfield_1_means.csv", "a035/farfield_1_stdevs.csv")
-plot_everything("liftoff/farfield_3_means.csv", "liftoff/farfield_3_stdevs.csv")
+#plot_everything("a035/farfield_1_means.csv", "a035/farfield_1_stdevs.csv")
+#plot_everything("liftoff/farfield_3_means.csv", "liftoff/farfield_3_stdevs.csv")
 
 

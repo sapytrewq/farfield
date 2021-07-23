@@ -51,8 +51,8 @@ def simple_plot(means_filename, stdev_filename):
         plt.plot(directivity_mean_90_x, directivity_mean_90_y, '.-')
         plt.title('Mean Directivity')
         plt.legend( [ 'Base: 0 Deg', 'Base: 90 Deg'] )
-        plt.xlim([-0.1,0.1])
-        plt.ylim([0,0.2])
+        #plt.xlim([-0.1,0.1])
+        #plt.ylim([0,0.2])
 
         plt.subplot(1, 2, 2)
         plt.plot(armAngle, snr0, '.-')
@@ -102,5 +102,5 @@ def one_axis_plot(means_filename, stdev_filename):
         plt.show()
 
 #one_axis_plot("farfield_14_means.csv", "farfield_14_stdevs.csv")
-simple_plot("a035/farfield_0_means.csv", "a035/farfield_0_stdevs.csv")
-simple_plot("liftoff/farfield_2_means.csv", "liftoff/farfield_2_stdevs.csv")
+#simple_plot("a035/farfield_0_means.csv", "a035/farfield_0_stdevs.csv")
+#simple_plot("liftoff/farfield_2_means.csv", "liftoff/farfield_2_stdevs.csv")
