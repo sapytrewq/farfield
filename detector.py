@@ -15,6 +15,7 @@ def reset_fsr():
 
 def constant_gain():
 	ads.gain = 2
+	print ("Gain set to 2")
 	
 def set_fsr(max_voltage):
 	'''sets full scale range on adc'''
